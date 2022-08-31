@@ -203,54 +203,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Fleet Management",
-   "link_count": 4,
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Driver",
-   "link_count": 0,
-   "link_to": "Driver",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Vehicle",
-   "link_count": 0,
-   "link_to": "Vehicle",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Vehicle Log",
-   "link_count": 0,
-   "link_to": "Vehicle Log",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Vehicle Expenses",
-   "link_count": 0,
-   "link_to": "Vehicle Expenses",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Daily Work Summary",
    "link_count": 3,
    "onboard": 0,
@@ -335,8 +287,8 @@
    "type": "Link"
   }
  ],
- "modified": "2022-08-22 20:50:39.049232",
- "modified_by": "Administrator",
+ "modified": "2022-08-31 23:11:55.052317",
+ "modified_by": "ruchamahabal2@gmail.com",
  "module": "HR",
  "name": "Employee Lifecycle",
  "owner": "Administrator",
