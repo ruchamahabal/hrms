@@ -39,8 +39,25 @@ frappe.ui.form.on("Job Offer", {
 				}
 			);
 		}
-	}
+	},
 
+	salary_structure: function(frm) {
+		if (frm.doc.salary_structure) {
+			frm.call("pull_salary_structure").then(() => refresh_field("salary_breakup"));
+		}
+	},
+
+	base: function(frm) {
+		if (frm.doc.salary_structure) {
+			frm.call("pull_salary_structure").then(() => refresh_field("salary_breakup"));
+		}
+	},
+
+	variable: function(frm) {
+		if (frm.doc.salary_structure) {
+			frm.call("pull_salary_structure").then(() => refresh_field("salary_breakup"));
+		}
+	}
 });
 
 erpnext.job_offer.make_employee = function (frm) {
