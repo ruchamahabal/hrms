@@ -9,7 +9,7 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.query_builder import Criterion
-from frappe.utils import add_days, cstr, get_link_to_form, get_time, getdate, now_datetime
+from frappe.utils import add_days, cint, cstr, get_link_to_form, get_time, getdate, now_datetime
 
 from hrms.hr.utils import validate_active_employee
 
@@ -314,6 +314,8 @@ def get_employee_shift(
 	default_shift = frappe.db.get_value("Employee", employee, "default_shift", cache=True)
 	if not shift_details and consider_default_shift:
 		shift_details = get_shift_details(default_shift, for_timestamp)
+		if shift_details:
+			shift_details.is_default_shift = True
 
 	# if no shift is found, find next or prev shift assignment based on direction
 	if not shift_details and next_shift_direction:
@@ -394,31 +396,44 @@ def get_employee_shift_timings(
 	)
 
 	if curr_shift:
-		# adjust actual start and end times if they are overlapping with grace period (before start and after end)
-		if prev_shift:
-			curr_shift.actual_start = (
-				prev_shift.end_datetime
-				if curr_shift.actual_start < prev_shift.end_datetime
-				else curr_shift.actual_start
-			)
-			prev_shift.actual_end = (
-				curr_shift.actual_start
-				if prev_shift.actual_end > curr_shift.actual_start
-				else prev_shift.actual_end
-			)
-		if next_shift:
-			next_shift.actual_start = (
-				curr_shift.end_datetime
-				if next_shift.actual_start < curr_shift.end_datetime
-				else next_shift.actual_start
-			)
-			curr_shift.actual_end = (
-				next_shift.actual_start
-				if curr_shift.actual_end > next_shift.actual_start
-				else curr_shift.actual_end
-			)
+		adjust_shift_margins(prev_shift, curr_shift, next_shift)
 
 	return prev_shift, curr_shift, next_shift
+
+
+def adjust_shift_margins(prev_shift: dict, curr_shift: dict, next_shift: dict) -> None:
+	"""
+	Adjusts shift margins (begin checkin before.. and allow checkout after..) if they are overlapping e.g.
+	shift A : 8 to 12 (shift margin = 7 to 13)
+	shift B : 13 to 16 (shift margin = 12 to 17)
+	shifts A and B are overlapping within margin period from 12 to 13.
+	Shift margins after adjustment: shift A : 7 to 12, shift B : 12 to 17
+	Doesn't adjust margins for an assigned shift overlapping with default shift if allow_default_shift_override is disabled
+	"""
+	allow_default_shift_override = cint(frappe.db.get_single_value("HR Settings", "allow_default_shift_override"))
+
+	print("--------", prev_shift, curr_shift, next_shift)
+	if prev_shift:
+		if (
+			not allow_default_shift_override
+			and prev_shift.is_default_shift
+			and not curr_shift.is_default_shift
+		):
+			prev_shift.actual_end = min(prev_shift.actual_end, curr_shift.actual_start)
+		else:
+			curr_shift.actual_start = max(prev_shift.end_datetime, curr_shift.actual_start)
+			prev_shift.actual_end = min(prev_shift.actual_end, curr_shift.actual_start)
+
+	if next_shift:
+		if (
+			not allow_default_shift_override
+			and not curr_shift.is_default_shift
+			and next_shift.is_default_shift
+		):
+			curr_shift.actual_end = max(curr_shift.actual_end, next_shift.actual_start)
+		else:
+			next_shift.actual_start = max(curr_shift.end_datetime, next_shift.actual_start)
+			curr_shift.actual_end = min(curr_shift.actual_end, next_shift.actual_start)
 
 
 def get_actual_start_end_datetime_of_shift(

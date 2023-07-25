@@ -4,7 +4,7 @@
 import unittest
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests.utils import FrappeTestCase, change_settings
 from frappe.utils import add_days, get_datetime, getdate, nowdate
 
 from erpnext.setup.doctype.employee.test_employee import make_employee
@@ -210,6 +210,7 @@ class TestShiftAssignment(FrappeTestCase):
 		self.assertEqual(len(events), 1)
 		self.assertEqual(events[0]["name"], shift1.name)
 
+	@change_settings("HR Settings", {"allow_default_shift_override": 1})
 	def test_consecutive_day_and_night_shifts(self):
 		# defaults
 		employee = make_employee("test_shift_assignment@example.com", company="_Test Company")
@@ -228,7 +229,7 @@ class TestShiftAssignment(FrappeTestCase):
 		)
 		make_shift_assignment(shift_type.name, employee, yesterday, yesterday)
 
-		# prev shift log
+		# prev shift log - assigned shift
 		prev_shift = get_actual_start_end_datetime_of_shift(
 			employee, get_datetime(f"{today} 07:00:00"), True
 		)
@@ -236,14 +237,15 @@ class TestShiftAssignment(FrappeTestCase):
 		self.assertEqual(prev_shift.actual_start.date(), yesterday)
 		self.assertEqual(prev_shift.actual_end.date(), today)
 
-		# current shift IN
+		# current shift IN - default shift
 		checkin = get_actual_start_end_datetime_of_shift(
 			employee, get_datetime(f"{today} 07:01:00"), True
 		)
-		# current shift OUT
+		# current shift OUT - default shift
 		checkout = get_actual_start_end_datetime_of_shift(
 			employee, get_datetime(f"{today} 19:00:00"), True
 		)
+		# ensure start and end matches
 		self.assertEqual(checkin.shift_type, checkout.shift_type)
 		self.assertEqual(checkin.actual_start.date(), today)
 		self.assertEqual(checkout.actual_end.date(), today)

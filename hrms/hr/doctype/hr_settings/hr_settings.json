@@ -1,4 +1,5 @@
 {
+ "_comments": "[{\"comment\": \"<div class=\\\"ql-editor read-mode\\\"><p>For instance, if an employee's default shift (2\\u20135) overlaps w...\", \"by\": \"Administrator\", \"name\": \"b9a6064714\"}]",
  "actions": [],
  "creation": "2013-08-02 13:45:23",
  "doctype": "DocType",
@@ -18,6 +19,8 @@
   "column_break_18",
   "send_holiday_reminders",
   "frequency",
+  "shift_settings_section",
+  "allow_default_shift_override",
   "leave_and_expense_claim_settings",
   "send_leave_notification",
   "leave_approval_notification_template",
@@ -251,13 +254,26 @@
   {
    "fieldname": "column_break_34",
    "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "shift_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Shift Settings"
+  },
+  {
+   "default": "1",
+   "description": "e.g. <b>Default Shift:</b> 2 to 6, \n<b>Assigned Shift:</b> 6 to 8 (with shift margin of 60 mins (5 to 6))<br>\nIf enabled, Default Shift will be set for the checkins between 5 to 6, overriding Assigned Shift's margin.",
+   "fieldname": "allow_default_shift_override",
+   "fieldtype": "Check",
+   "label": "Allow Default Shift to Override Assigned Shift in Shift Margin Period"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-10-04 17:29:45.926918",
+ "modified": "2023-07-25 17:01:41.444813",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",
@@ -275,5 +291,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "ASC",
+ "states": [],
  "track_changes": 1
 }

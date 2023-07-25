@@ -5,13 +5,14 @@ import unittest
 from datetime import datetime, timedelta
 
 import frappe
-from frappe.tests.utils import FrappeTestCase
+from frappe.tests.utils import FrappeTestCase, change_settings
 from frappe.utils import (
 	add_days,
 	get_time,
 	get_year_ending,
 	get_year_start,
 	getdate,
+	get_datetime,
 	now_datetime,
 	nowdate,
 )
@@ -212,19 +213,23 @@ class TestEmployeeCheckin(FrappeTestCase):
 		self.assertEqual(log.shift_actual_start, datetime.combine(date, get_time("07:00:00")))
 		self.assertEqual(log.shift_actual_end, datetime.combine(date, get_time("13:00:00")))
 
-	def test_fetch_shift_based_on_default_shift(self):
+	def test_fetch_default_shift(self):
 		employee = make_employee("test_default_shift@example.com", company="_Test Company")
+		# shift spanning 2 days
 		default_shift = setup_shift_type(
-			shift_type="Default Shift", start_time="14:00:00", end_time="16:00:00"
+			shift_type="Default Shift", start_time="19:00:00", end_time="07:00:00"
 		)
 
 		date = getdate()
 		frappe.db.set_value("Employee", employee, "default_shift", default_shift.name)
 
-		timestamp = datetime.combine(date, get_time("14:45:00"))
+		timestamp = datetime.combine(date, get_time("19:45:00"))
 		log = make_checkin(employee, timestamp)
+		self.assertEqual(log.shift, default_shift.name)
 
-		# should consider default shift
+		# consider default shift in shift margin period
+		timestamp = datetime.combine(date, get_time("08:50:00"))
+		log = make_checkin(employee, timestamp)
 		self.assertEqual(log.shift, default_shift.name)
 
 	def test_fetch_night_shift_for_assignment_without_end_date(self):
@@ -303,7 +308,7 @@ class TestEmployeeCheckin(FrappeTestCase):
 		log = make_checkin(employee, datetime.combine(prev_day, get_time("23:00:00")))
 		self.assertIsNone(log.shift)
 
-	def test_consecutive_shift_assignments_overlapping_within_grace_period(self):
+	def test_consecutive_shift_assignments_overlapping_within_shift_margins(self):
 		# test adjustment for start and end times if they are overlapping
 		# within "begin_check_in_before_shift_start_time" and "allow_check_out_after_shift_end_time" periods
 		employee = make_employee("test_shift@example.com", company="_Test Company")
@@ -338,6 +343,43 @@ class TestEmployeeCheckin(FrappeTestCase):
 		timestamp = datetime.combine(date, get_time("12:01:00"))
 		log = make_checkin(employee, timestamp)
 		self.assertEqual(log.shift, shift2.name)
+
+	@change_settings("HR Settings", {"allow_default_shift_override": 1})
+	def test_allow_default_shift_override_enabled(self):
+		"""Test to ensure default shift overrides assigned shift in shift margin period"""
+		# within "begin_check_in_before_shift_start_time" and "allow_check_out_after_shift_end_time" periods
+		shift1 = setup_shift_type() # 8 - 12
+		shift2 = setup_shift_type(
+			shift_type="Consecutive Shift", start_time="13:00:00", end_time="17:00:00"
+		)
+		employee = make_employee("test_shift@example.com", company="_Test Company", default_shift=shift1.name)
+
+		# the actual start and end times (with margin) for these shifts are 7 - 13 and 12 - 18
+		date = getdate()
+		make_shift_assignment(shift2.name, employee, date)
+
+		# log at 12:30 should set shift2 and actual start as 12 and not 11
+		log = make_checkin(employee, f"{date} 12:30:00")
+		self.assertEqual(log.shift, shift2.name)
+		self.assertEqual(log.shift_start, get_datetime(f"{date} 13:00:00"))
+		self.assertEqual(log.shift_actual_start, get_datetime(f"{date} 12:00:00"))
+
+		# log at 12:00 should set shift1 and actual end as 12 and not 13 since the next shift's grace starts
+		timestamp = datetime.combine(date, get_time("12:00:00"))
+		log = make_checkin(employee, timestamp)
+		self.assertEqual(log.shift, shift1.name)
+		self.assertEqual(log.shift_end, datetime.combine(date, get_time("12:00:00")))
+		self.assertEqual(log.shift_actual_end, datetime.combine(date, get_time("12:00:00")))
+
+		# log at 12:01 should set shift2
+		timestamp = datetime.combine(date, get_time("12:01:00"))
+		log = make_checkin(employee, timestamp)
+		self.assertEqual(log.shift, shift2.name)
+
+	@change_settings("HR Settings", {"allow_default_shift_override": 0})
+	def test_allow_default_shift_override_disabled(self):
+		"""Tests to ensure default shift doesn't override assigned shift in shift margin period"""
+		pass
 
 
 def make_n_checkins(employee, n, hours_to_reverse=1):
