@@ -49,9 +49,9 @@
 </template>
 
 <script setup>
-import { computed } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router"
-import { ErrorMessage, FeatherIcon, createListResource, toast } from "frappe-ui"
+import { ErrorMessage, FeatherIcon, createListResource, createDocumentResource, toast } from "frappe-ui"
 import FormField from "@/components/FormField.vue"
 
 const props = defineProps({
@@ -73,14 +73,24 @@ const props = defineProps({
 	},
 })
 const router = useRouter()
-const emit = defineEmits(["validateForm"])
+const emit = defineEmits(["validateForm", "update:modelValue"])
 
-const formModel = computed({
-	get: () => props.modelValue,
-	set: (value) => {
-		emit("update:modelValue", value)
+// const formModel = computed({
+// 	get: () => props.modelValue,
+// 	set: (value) => {
+// 		emit("update:modelValue", value)
+// 	},
+// })
+
+const formModel = ref(props.modelValue)
+
+watch(
+	formModel,
+	(newValue) => {
+	emit("update:modelValue", newValue);
 	},
-})
+	{ deep: true } // Use deep option to watch for nested changes in objects/arrays.
+);
 
 const docList = createListResource({
 	doctype: props.doctype,
@@ -101,10 +111,10 @@ const docList = createListResource({
 	},
 })
 
-props.fields?.forEach((field) => {
-	if (field.default) {
-		formModel.value[field.fieldname] = field.default
-	}
+const documentResource = createDocumentResource({
+	doctype: props.doctype,
+	name: props.id,
+	fields: "*",
 })
 
 const saveButtonDisabled = computed(() => {
@@ -119,4 +129,11 @@ function submitForm() {
 	emit("validateForm")
 	docList.insert.submit(formModel.value)
 }
+
+onMounted(async () => {
+	if (props.id) {
+		await documentResource.get.promise
+		formModel.value = documentResource.doc
+	}
+})
 </script>

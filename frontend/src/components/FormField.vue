@@ -202,6 +202,6 @@ function setDefaultValue() {
 
 onMounted(() => {
 	setLinkFieldList()
-	setDefaultValue()
+	// setDefaultValue()
 })
 </script>
