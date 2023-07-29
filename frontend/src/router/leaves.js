@@ -20,6 +20,11 @@ const routes = [
 		props: true,
 		component: () => import("@/views/leaves/Form.vue"),
 	},
+	{
+		name:"Geolocation",
+		path: "/geo",
+		component: () => import("@/components/TestGeolocation.vue"),
+	}
 ]
 
 export default routes
