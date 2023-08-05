@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col h-screen w-screen" v-if="isFormReady">
+	<!-- <div class="flex flex-col h-screen w-screen" v-if="isFormReady">
 		<div class="w-full sm:w-96">
 			<header
 				class="flex flex-row gap-1 bg-white shadow-sm py-4 px-2 items-center border-b sticky top-0 z-10"
@@ -16,47 +16,49 @@
 				<h2 v-else class="text-2xl font-semibold text-gray-900">
 					{{ `New ${doctype}` }}
 				</h2>
-			</header>
+			</header> -->
 
-			<div class="flex flex-col space-y-4 bg-white p-4">
-				<FormField
-					v-for="field in props.fields"
-					:key="field.name"
-					:fieldtype="field.fieldtype"
-					:fieldname="field.fieldname"
-					v-model="formModel[field.fieldname]"
-					:default="field.default"
-					:label="field.label"
-					:options="field.options"
-					:documentList="field.documentList"
-					:readOnly="Boolean(field.read_only)"
-					:reqd="Boolean(field.reqd)"
-					:hidden="Boolean(field.hidden)"
-					:errorMessage="field.error_message"
-					:minDate="field.minDate"
-					:maxDate="field.maxDate"
-				/>
-			</div>
+			<div v-if="isFormReady">
+				<div class="flex flex-col space-y-4 bg-white p-4">
+					<FormField
+						v-for="field in props.fields"
+						:key="field.name"
+						:fieldtype="field.fieldtype"
+						:fieldname="field.fieldname"
+						v-model="formModel[field.fieldname]"
+						:default="field.default"
+						:label="field.label"
+						:options="field.options"
+						:documentList="field.documentList"
+						:readOnly="Boolean(field.read_only)"
+						:reqd="Boolean(field.reqd)"
+						:hidden="Boolean(field.hidden)"
+						:errorMessage="field.error_message"
+						:minDate="field.minDate"
+						:maxDate="field.maxDate"
+					/>
+				</div>
 
-			<div class="p-4 bg-white">
-				<ErrorMessage
-					class="mb-2"
-					:message="docList.insert.error || documentResource?.setValue?.error"
-				/>
-				<Button
-					class="w-full rounded-md py-2.5 px-3.5"
-					appearance="primary"
-					@click="submitForm"
-					:disabled="saveButtonDisabled"
-					:loading="
-						docList.insert.loading || documentResource?.setValue?.loading
-					"
-				>
-					Save
-				</Button>
+				<div class="p-4 bg-white">
+					<ErrorMessage
+						class="mb-2"
+						:message="docList.insert.error || documentResource?.setValue?.error"
+					/>
+					<Button
+						class="w-full rounded-md py-2.5 px-3.5"
+						appearance="primary"
+						@click="submitForm"
+						:disabled="saveButtonDisabled"
+						:loading="
+							docList.insert.loading || documentResource?.setValue?.loading
+						"
+					>
+						Save
+					</Button>
+				</div>
 			</div>
-		</div>
-	</div>
+		<!-- </div>
+	</div> -->
 </template>
 
 <script setup>
