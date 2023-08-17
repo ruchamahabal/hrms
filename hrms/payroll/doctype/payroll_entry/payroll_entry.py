@@ -310,13 +310,25 @@ class PayrollEntry(Document):
 						add_component_to_accrual_jv_entry = False
 
 				if add_component_to_accrual_jv_entry:
-					is_advance_deduction = self.is_advance_deduction(component_type, item)
+					employee_advance = self.get_advance_deduction(component_type, item)
 
 					for cost_center, percentage in employee_cost_centers.items():
 						amount_against_cost_center = flt(item.amount) * percentage / 100
-						party = item.employee if is_advance_deduction else None
-						key = (item.salary_component, cost_center, party)
-						component_dict[key] = component_dict.get(key, 0) + amount_against_cost_center
+
+						if employee_advance:
+							self._advance_deduction_entries.append(
+								{
+									"employee": item.employee,
+									"account": self.get_salary_component_account(item.salary_component),
+									"amount": amount_against_cost_center,
+									"cost_center": cost_center,
+									"reference_type": "Employee Advance",
+									"reference_name": employee_advance,
+								}
+							)
+						else:
+							key = (item.salary_component, cost_center)
+							component_dict[key] = component_dict.get(key, 0) + amount_against_cost_center
 
 						if employee_wise_accounting_enabled:
 							self.set_employee_based_payroll_payable_entries(
@@ -327,12 +339,17 @@ class PayrollEntry(Document):
 
 			return account_details
 
-	def is_advance_deduction(self, component_type: str, item: dict) -> bool:
+	def get_advance_deduction(self, component_type: str, item: dict) -> str | None:
 		if component_type == "deductions" and item.additional_salary:
-			ref_doctype = frappe.db.get_value("Additional Salary", item.additional_salary, "ref_doctype")
+			ref_doctype, ref_docname = frappe.db.get_value(
+				"Additional Salary",
+				item.additional_salary,
+				["ref_doctype", "ref_docname"],
+			)
 
-			return ref_doctype == "Employee Advance"
-		return False
+			if ref_doctype == "Employee Advance":
+				return ref_docname
+		return
 
 	def set_employee_based_payroll_payable_entries(
 		self, component_type, employee, amount, salary_structure=None
@@ -388,9 +405,9 @@ class PayrollEntry(Document):
 		account_dict = {}
 		for key, amount in component_dict.items():
 			account = self.get_salary_component_account(key[0])
-			accouting_key = (account, key[1], key[2])
+			accounting_key = (account, key[1])
 
-			account_dict[accouting_key] = account_dict.get(accouting_key, 0) + amount
+			account_dict[accounting_key] = account_dict.get(accounting_key, 0) + amount
 
 		return account_dict
 
@@ -400,6 +417,7 @@ class PayrollEntry(Document):
 			"Payroll Settings", "process_payroll_accounting_entry_based_on_employee"
 		)
 		self.employee_based_payroll_payable_entries = {}
+		self._advance_deduction_entries = []
 
 		earnings = (
 			self.get_salary_component_total(
@@ -436,6 +454,24 @@ class PayrollEntry(Document):
 				precision,
 				payable_amount,
 			)
+
+			for entry in self._advance_deduction_entries:
+				payable_amount = self.get_accounting_entries_and_payable_amount(
+					entry.get("account"),
+					entry.get("cost_center"),
+					entry.get("amount"),
+					currencies,
+					company_currency,
+					payable_amount,
+					accounting_dimensions,
+					precision,
+					entry_type="credit",
+					accounts=accounts,
+					party=entry.get("employee"),
+					reference_type="Employee Advance",
+					reference_name=entry.get("reference_name"),
+					is_advance="Yes",
+				)
 
 			self.set_payable_amount_against_payroll_payable_account(
 				accounts,
@@ -541,7 +577,6 @@ class PayrollEntry(Document):
 				precision,
 				entry_type="credit",
 				accounts=accounts,
-				party=acc_cc[2],
 			)
 
 		return payable_amount
@@ -614,6 +649,9 @@ class PayrollEntry(Document):
 		entry_type="credit",
 		party=None,
 		accounts=None,
+		reference_type=None,
+		reference_name=None,
+		is_advance=None,
 	):
 		exchange_rate, amt = self.get_amount_and_exchange_rate_for_journal_entry(
 			account, amount, company_currency, currencies
@@ -654,6 +692,14 @@ class PayrollEntry(Document):
 				{
 					"party_type": "Employee",
 					"party": party,
+				}
+			)
+		if reference_type:
+			row.update(
+				{
+					"reference_type": reference_type,
+					"reference_name": reference_name,
+					"is_advance": is_advance,
 				}
 			)
 
