@@ -38,6 +38,9 @@ class PayrollEntry(Document):
 		entries = frappe.db.count("Salary Slip", {"payroll_entry": self.name, "docstatus": 1}, ["name"])
 		if cint(entries) == len(self.employees):
 			self.set_onload("submitted_ss", True)
+		JE_entries = frappe.db.count("Journal Entry Account" , {"reference_name": self.name, "docstatus": 1 , "reference_type":"Payroll Entry"}, ["name"])
+		if cint(JE_entries) == len(self.employees):
+			self.db_set("journal_entry_submitted", True)
 
 	def validate(self):
 		self.number_of_employees = len(self.employees)
@@ -389,6 +392,7 @@ class PayrollEntry(Document):
 
 		return account_dict
 
+	@frappe.whitelist()
 	def make_accrual_jv_entry(self):
 		self.check_permission("write")
 		process_payroll_accounting_entry_based_on_employee = frappe.db.get_single_value(
@@ -518,6 +522,8 @@ class PayrollEntry(Document):
 				journal_entry.submit()
 				jv_name = journal_entry.name
 				self.update_salary_slip_status(jv_name=jv_name)
+				self.db_set('journal_entry_submitted' , 1)
+				frappe.msgprint("Journal Entry Created Successfully")
 			except Exception as e:
 				if type(e) in (str, list, tuple):
 					frappe.msgprint(e)

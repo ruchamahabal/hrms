@@ -133,6 +133,24 @@ frappe.ui.form.on('Payroll Entry', {
 				submit_salary_slip(frm);
 			}).addClass("btn-primary");
 		}
+		if ( (!frm.doc.journal_entry_submitted && frm.doc.salary_slips_submitted) || (frm.doc.__onload && frm.doc.__onload.submitted_ss)){
+			frm.events.add_journal_entry_button(frm);
+		}
+	},
+
+	add_journal_entry_button: function(frm){
+		frm.add_custom_button(__("Create Journal Entry"), function () {
+			frappe.call({
+				doc:frm.doc,
+				method: 'make_accrual_jv_entry',
+				
+				callback: function (r) {
+					if (r.message && !r.message.submitted) {
+						frm.remove_custom_button("Create Journal Entry")
+					}
+				}
+			});
+		})
 	},
 
 	add_bank_entry_button: function (frm) {

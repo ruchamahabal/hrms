@@ -46,6 +46,7 @@
   "bank_account",
   "salary_slips_created",
   "salary_slips_submitted",
+  "journal_entry_submitted",
   "failure_details_section",
   "error_message",
   "section_break_41",
@@ -324,7 +325,15 @@
    "fieldtype": "Tab Break",
    "label": "Connections",
    "show_dashboard": 1
-  }
+  },
+  {
+   "default": "0",
+   "fieldname": "journal_entry_submitted",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Journal Entry Submitted",
+   "read_only": 1
+}
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
