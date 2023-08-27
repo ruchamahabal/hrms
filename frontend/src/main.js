@@ -16,7 +16,7 @@ import { IonicVue } from "@ionic/vue"
 
 import { session } from "@/data/session"
 import { userResource } from "@/data/user"
-import { getEmployee } from "@/data/employee"
+import { employee } from "@/data/employee"
 import dayjs from "@/utils/dayjs"
 
 /* Core CSS required for Ionic components to work properly */
@@ -41,7 +41,7 @@ app.use(IonicVue)
 
 app.provide("$session", session)
 app.provide("$user", userResource)
-app.provide("$employee", getEmployee)
+app.provide("$employee", employee)
 app.provide("$socket", socket)
 app.provide("$dayjs", dayjs)
 

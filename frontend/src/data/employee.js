@@ -1,4 +1,5 @@
 import router from "@/router"
+import { computed } from "vue"
 import { createResource } from "frappe-ui"
 
 export const employeeResource = createResource({
@@ -14,3 +15,5 @@ export const employeeResource = createResource({
 export function getEmployee() {
 	return employeeResource.data
 }
+
+export const employee = computed(() => employeeResource.data)

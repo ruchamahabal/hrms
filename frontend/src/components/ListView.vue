@@ -178,9 +178,9 @@ const defaultFilters = computed(() => {
 	const filters = []
 
 	if (isTeamRequest.value) {
-		filters.push([props.doctype, "employee", "!=", employee().name])
+		filters.push([props.doctype, "employee", "!=", employee.value.name])
 	} else {
-		filters.push([props.doctype, "employee", "=", employee().name])
+		filters.push([props.doctype, "employee", "=", employee.value.name])
 	}
 
 	return filters

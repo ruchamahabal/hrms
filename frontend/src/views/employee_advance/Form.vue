@@ -34,10 +34,10 @@ const props = defineProps({
 
 // object to store form data
 const employeeAdvance = ref({
-	employee: employee().name,
-	employee_name: employee().employee_name,
-	company: employee().company,
-	department: employee().department,
+	employee: employee.value.name,
+	employee_name: employee.value.employee_name,
+	company: employee.value.company,
+	department: employee.value.department,
 })
 
 const companyCurrency = computed(() =>
@@ -61,7 +61,7 @@ formFields.reload()
 
 const employeeCurrency = createResource({
 	url: "hrms.payroll.doctype.salary_structure_assignment.salary_structure_assignment.get_employee_currency",
-	params: { employee: employee().name },
+	params: { employee: employee.value.name },
 	onSuccess(data) {
 		employeeAdvance.value.currency = data
 		setExchangeRate()

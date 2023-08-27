@@ -1,5 +1,5 @@
 import { createResource } from "frappe-ui"
-import { getEmployee } from "./employee"
+import { employee } from "./employee"
 import { reactive } from "vue"
 
 const transformClaimData = (data) => {
@@ -9,12 +9,10 @@ const transformClaimData = (data) => {
 	})
 }
 
-const employee = getEmployee()
-
 export const myClaims = createResource({
 	url: "hrms.api.get_expense_claims",
 	params: {
-		employee: employee.name,
+		employee: employee.value.name,
 		limit: 5,
 	},
 	auto: true,
@@ -26,8 +24,8 @@ export const myClaims = createResource({
 export const teamClaims = createResource({
 	url: "hrms.api.get_expense_claims",
 	params: {
-		employee: employee.name,
-		approver_id: employee.user_id,
+		employee: employee.value.name,
+		approver_id: employee.value.user_id,
 		for_approval: 1,
 		limit: 5,
 	},
