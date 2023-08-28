@@ -38,7 +38,11 @@ class PayrollEntry(Document):
 		entries = frappe.db.count("Salary Slip", {"payroll_entry": self.name, "docstatus": 1}, ["name"])
 		if cint(entries) == len(self.employees):
 			self.set_onload("submitted_ss", True)
-		JE_entries = frappe.db.count("Journal Entry Account" , {"reference_name": self.name, "docstatus": 1 , "reference_type":"Payroll Entry"}, ["name"])
+		JE_entries = frappe.db.count(
++			"Journal Entry Account",
++			{"reference_name": self.name, "docstatus": 1, "reference_type": "Payroll Entry"},
++			["name"],
++		)
 		if cint(JE_entries) == len(self.employees):
 			self.db_set("journal_entry_submitted", True)
 
