@@ -136,8 +136,11 @@ frappe.ui.form.on('Payroll Entry', {
 			frm.add_custom_button(__("Create Salary Slips"), function() {
 				frm.trigger("create_salary_slips");
 			}).addClass("btn-primary");
-		}
-		if ( (!frm.doc.journal_entry_submitted && frm.doc.salary_slips_submitted) || (frm.doc.__onload && frm.doc.__onload.submitted_ss)){
+		} else if (
+			(!frm.doc.journal_entry_submitted
+			&& frm.doc.salary_slips_submitted)
+			|| (frm.doc.__onload && frm.doc.__onload.submitted_ss)
+		) {
 			frm.events.add_journal_entry_button(frm);
 		}
 	},
@@ -147,7 +150,6 @@ frappe.ui.form.on('Payroll Entry', {
 			frappe.call({
 				doc:frm.doc,
 				method: 'make_accrual_jv_entry',
-				
 				callback: function (r) {
 					if (r.message && !r.message.submitted) {
 						frm.remove_custom_button("Create Journal Entry")
