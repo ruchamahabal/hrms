@@ -332,13 +332,14 @@
    "fieldtype": "Check",
    "hidden": 1,
    "label": "Journal Entry Submitted",
-   "read_only": 1
+   "read_only": 1,
+   "no_copy": 1
 }
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-05 17:07:00.372983",
+ "modified": "2023-01-05 17:08:00.372983",
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Payroll Entry",
