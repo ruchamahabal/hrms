@@ -58,22 +58,23 @@ router.isReady().then(() => {
 })
 
 router.beforeEach(async (to, from, next) => {
-	let isLoggedIn = session.isLoggedIn
-	try {
-		await userResource.promise
-	} catch (error) {
-		isLoggedIn = false
-	}
+	// let isLoggedIn = session.isLoggedIn
+	// try {
+	// 	await userResource.promise
+	// } catch (error) {
+	// 	isLoggedIn = false
+	// }
 
-	if (isLoggedIn) {
-		await employeeResource.promise
-	}
+	// if (isLoggedIn) {
+	// 	await employeeResource.promise
+	// }
 
-	if (to.name === "Login" && isLoggedIn) {
-		next({ name: "Home" })
-	} else if (to.name !== "Login" && !isLoggedIn) {
-		next({ name: "Login" })
-	} else {
-		next()
-	}
+	// if (to.name === "Login" && isLoggedIn) {
+	// 	next({ name: "Home" })
+	// } else if (to.name !== "Login" && !isLoggedIn) {
+	// 	next({ name: "Login" })
+	// } else {
+	// 	next()
+	// }
+	next()
 })

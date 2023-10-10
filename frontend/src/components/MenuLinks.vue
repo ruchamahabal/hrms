@@ -71,6 +71,20 @@ const menuItems = ref([
 			name: "SalarySlips",
 		},
 	},
+	{
+		icon: "file",
+		title: "Test1",
+		route: {
+			name: "Test1",
+		},
+	},
+	{
+		icon: "file",
+		title: "Test2",
+		route: {
+			name: "Test2",
+		},
+	}
 ])
 
 const route = useRoute()

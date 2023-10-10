@@ -26,6 +26,16 @@ const routes = [
 		name: "Notifications",
 		component: () => import("@/views/Notifications.vue"),
 	},
+	{
+		path: "/test1",
+		name: "Test1",
+		component: () => import("@/views/Test1.vue"),
+	},
+	{
+		path: "/test2",
+		name: "Test2",
+		component: () => import("@/views/Test2.vue"),
+	},
 	...leaveRoutes,
 	...claimRoutes,
 	...employeeAdvanceRoutes,

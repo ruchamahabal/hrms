@@ -10,7 +10,7 @@
 									<FeatherIcon name="menu" class="h-6 w-6" />
 								</Button>
 							</ion-menu-toggle>
-							<div class="flex flex-row items-center gap-3">
+							<!-- <div class="flex flex-row items-center gap-3">
 								<router-link
 									:to="{ name: 'Notifications' }"
 									v-slot="{ navigate }"
@@ -35,7 +35,7 @@
 										size="xl"
 									/>
 								</router-link>
-							</div>
+							</div> -->
 						</div>
 
 						<div class="mt-5">
@@ -60,11 +60,11 @@ import { FeatherIcon, Avatar } from "frappe-ui"
 
 import CheckInPanel from "@/components/CheckInPanel.vue"
 
-import { unreadNotificationsCount } from "@/data/notifications"
+// import { unreadNotificationsCount } from "@/data/notifications"
 
-import { inject } from "vue"
+// import { inject } from "vue"
 
-const user = inject("$user")
+// const user = inject("$user")
 
 const props = defineProps({
 	pageTitle: {
