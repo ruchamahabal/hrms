@@ -1,5 +1,8 @@
 <template>
-	<ion-menu side="start" content-id="main-content" :swipe-gesture="false">
+	<ion-menu
+		menu-id="main-menu"
+		content-id="main-content"
+	>
 		<ion-content class="ion-padding">
 			<div class="bg-white h-full">
 				<div
@@ -18,4 +21,5 @@ import { IonContent, IonMenu } from "@ionic/vue"
 
 import MenuLinks from "@/components/MenuLinks.vue"
 import FrappeHRLogo from "@/components/icons/FrappeHRLogo.vue"
+import { menu } from "@/data/menu"
 </script>

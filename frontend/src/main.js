@@ -18,9 +18,10 @@ import { IonicVue } from "@ionic/vue"
 import { session } from "@/data/session"
 import { userResource } from "@/data/user"
 import { employeeResource } from "@/data/employee"
+import { menu } from "@/data/menu"
 
 import dayjs from "@/utils/dayjs"
-import getIonicConfig from "@/utils/ionicConfig"
+// import getIonicConfig from "@/utils/ionicConfig"
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/vue/css/core.css"
@@ -29,6 +30,37 @@ import "@ionic/vue/css/core.css"
 import "./theme/variables.css"
 
 import "./main.css"
+
+import { isPlatform, menuController } from "@ionic/vue"
+import { createAnimation, iosTransitionAnimation } from "@ionic/core"
+/**
+ * on iOS, the back swipe gesture triggers the animation twice:
+ * the safari's default back swipe animation & ionic's animation
+ * The config here takes care of the same
+ */
+
+export const animationBuilder = (baseEl, opts) => {
+	if (opts.direction === "back") {
+		/**
+		 * Even after disabling swipeBackEnabled, when the swipe is completed & we're back on the first screen
+		 * the "pop" animation is triggered, resulting in a double animation
+		 * HACK: return empty animation for back swipe in ios
+		 **/
+		return createAnimation()
+	}
+
+	return iosTransitionAnimation(baseEl, opts)
+}
+
+const getIonicConfig = () => {
+	return isPlatform("iphone")
+		? {
+				// disable ionic's swipe back gesture on ios
+				swipeBackEnabled: false,
+				navAnimation: animationBuilder,
+		  }
+		: {}
+}
 
 const app = createApp(App)
 
@@ -76,5 +108,6 @@ router.beforeEach(async (to, from, next) => {
 	// } else {
 	// 	next()
 	// }
+	menu.disabled = true
 	next()
 })

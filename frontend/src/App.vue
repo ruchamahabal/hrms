@@ -1,10 +1,10 @@
 <template>
 	<ion-app>
-		<Menu />
 		<ion-router-outlet id="main-content" />
+		<Menu v-if="!menu.disabled"/>
 		<Toasts />
 
-		<InstallPrompt />
+		<!-- <InstallPrompt /> -->
 	</ion-app>
 </template>
 
@@ -15,4 +15,5 @@ import { Toasts } from "frappe-ui"
 
 import Menu from "@/components/Menu.vue"
 import InstallPrompt from "@/components/InstallPrompt.vue"
+import { menu } from "@/data/menu"
 </script>

@@ -6,7 +6,7 @@
 					<div class="flex flex-col bg-white shadow-sm p-4">
 						<div class="flex flex-row justify-between items-center">
 							<ion-menu-toggle class="flex flex-col items-center">
-								<Button variant="ghost" class="!px-0 !py-0">
+								<Button variant="ghost" class="!px-0 !py-0" @click="() => menu.disabled = false">
 									<FeatherIcon name="menu" class="h-6 w-6" />
 								</Button>
 							</ion-menu-toggle>
@@ -59,6 +59,8 @@ import { IonContent, IonMenuToggle, IonPage } from "@ionic/vue"
 import { FeatherIcon, Avatar } from "frappe-ui"
 
 import CheckInPanel from "@/components/CheckInPanel.vue"
+
+import { menu } from "@/data/menu"
 
 // import { unreadNotificationsCount } from "@/data/notifications"
 
