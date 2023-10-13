@@ -39,9 +39,13 @@ export const session = reactive({
 
 			session.user = sessionUser()
 			router.replace({ name: "Login" })
-			window.location.reload()
+
+			if (!session.isInvalidEmployee) {
+				window.location.reload()
+			}
 		},
 	}),
 	user: sessionUser(),
 	isLoggedIn: computed(() => !!session.user),
+	isInvalidEmployee: false,
 })

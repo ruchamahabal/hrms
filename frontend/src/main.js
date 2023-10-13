@@ -67,6 +67,13 @@ router.beforeEach(async (to, from, next) => {
 
 	if (isLoggedIn) {
 		await employeeResource.promise
+		// user should be an employee to access the app
+		// since all views are employee specific
+		if (!employeeResource?.data) {
+			session.isInvalidEmployee = true
+			await session.logout.submit()
+			next({ name: "Login" })
+		}
 	}
 
 	if (to.name === "Login" && isLoggedIn) {
