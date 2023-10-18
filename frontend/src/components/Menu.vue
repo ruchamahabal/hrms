@@ -2,6 +2,7 @@
 	<ion-menu
 		menu-id="main-menu"
 		content-id="main-content"
+		:swipe-gesture="false"
 	>
 		<ion-content class="ion-padding">
 			<div class="bg-white h-full">

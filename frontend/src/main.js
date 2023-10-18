@@ -108,6 +108,6 @@ router.beforeEach(async (to, from, next) => {
 	// } else {
 	// 	next()
 	// }
-	menu.disabled = true
+	menuController.close("main-menu")
 	next()
 })

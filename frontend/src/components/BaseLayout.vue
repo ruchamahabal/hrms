@@ -1,15 +1,17 @@
 <template>
 	<ion-page>
-		<ion-content class="ion-no-padding">
+		<ion-header>
+			<ion-menu-button class="flex flex-col items-center">
+								<!-- <Button variant="ghost" class="!px-0 !py-0">
+									<FeatherIcon name="menu" class="h-6 w-6" />
+								</Button> -->
+							</ion-menu-button>
+		</ion-header>
+		<ion-content class="ion-no-padding block-swipe-nav">
 			<div class="flex flex-col h-screen w-screen">
 				<div class="w-full sm:w-96">
 					<div class="flex flex-col bg-white shadow-sm p-4">
 						<div class="flex flex-row justify-between items-center">
-							<ion-menu-toggle class="flex flex-col items-center">
-								<Button variant="ghost" class="!px-0 !py-0" @click="() => menu.disabled = false">
-									<FeatherIcon name="menu" class="h-6 w-6" />
-								</Button>
-							</ion-menu-toggle>
 							<!-- <div class="flex flex-row items-center gap-3">
 								<router-link
 									:to="{ name: 'Notifications' }"
@@ -47,7 +49,8 @@
 						</div>
 					</div>
 
-					<slot name="body"></slot>
+					<slot name="body">
+					</slot>
 				</div>
 			</div>
 		</ion-content>
@@ -55,7 +58,7 @@
 </template>
 
 <script setup>
-import { IonContent, IonMenuToggle, IonPage } from "@ionic/vue"
+import { IonHeader, IonContent, IonMenuToggle, IonPage, IonMenuButton, menuController } from "@ionic/vue"
 import { FeatherIcon, Avatar } from "frappe-ui"
 
 import CheckInPanel from "@/components/CheckInPanel.vue"
