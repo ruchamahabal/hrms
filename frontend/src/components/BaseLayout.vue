@@ -1,17 +1,15 @@
 <template>
 	<ion-page>
-		<ion-header>
-			<ion-menu-button class="flex flex-col items-center">
-								<!-- <Button variant="ghost" class="!px-0 !py-0">
-									<FeatherIcon name="menu" class="h-6 w-6" />
-								</Button> -->
-							</ion-menu-button>
-		</ion-header>
 		<ion-content class="ion-no-padding block-swipe-nav">
 			<div class="flex flex-col h-screen w-screen">
 				<div class="w-full sm:w-96">
 					<div class="flex flex-col bg-white shadow-sm p-4">
 						<div class="flex flex-row justify-between items-center">
+							<ion-menu-toggle class="flex flex-col items-center" :auto-hide="false">
+								<Button variant="ghost" class="!pl-0 hover:bg-white">
+									<FeatherIcon name="menu" class="h-6 w-6" />
+								</Button>
+							</ion-menu-toggle>
 							<!-- <div class="flex flex-row items-center gap-3">
 								<router-link
 									:to="{ name: 'Notifications' }"

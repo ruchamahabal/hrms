@@ -108,6 +108,8 @@ router.beforeEach(async (to, from, next) => {
 	// } else {
 	// 	next()
 	// }
-	menuController.close("main-menu")
+	if (menuController.isOpen()) {
+		await menuController.close()
+	}
 	next()
 })
