@@ -105,15 +105,13 @@
 
 		<!-- Date -->
 		<!-- FIXME: default datepicker has poor UI -->
-		<Input
+		<FormControl
 			v-else-if="props.fieldtype === 'Date'"
 			type="date"
 			v-model="date"
-			:value="modelValue"
-			:placeholder="`Select ${props.label}`"
 			:formatValue="(val) => dayjs(val).format('DD-MM-YYYY')"
-			@input="(v) => emit('update:modelValue', v)"
-			@change="(v) => emit('change', v)"
+			@input="emit('update:modelValue', $event.target.value)"
+			@change.stop="emit('change', $event.target.value)"
 			v-bind="$attrs"
 			:disabled="isReadOnly"
 			:min="props.minDate"
@@ -128,7 +126,7 @@
 </template>
 
 <script setup>
-import { createResource, Autocomplete, ErrorMessage } from "frappe-ui"
+import { createResource, Autocomplete, ErrorMessage, FormControl } from "frappe-ui"
 import { ref, computed, onMounted, inject, watchEffect } from "vue"
 
 const props = defineProps({
