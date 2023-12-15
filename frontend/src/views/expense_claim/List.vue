@@ -1,17 +1,23 @@
 <template>
-	<ListView
-		doctype="Expense Claim"
-		pageTitle="Claim History"
-		:tabButtons="TAB_BUTTONS"
-		:fields="EXPENSE_CLAIM_FIELDS"
-		groupBy="`tabExpense Claim`.name"
-		:filterConfig="FILTER_CONFIG"
-	/>
+	<ion-page>
+		<ListView
+			doctype="Expense Claim"
+			pageTitle="Claim History"
+			:tabButtons="TAB_BUTTONS"
+			:fields="EXPENSE_CLAIM_FIELDS"
+			groupBy="`tabExpense Claim`.name"
+			:filterConfig="FILTER_CONFIG"
+			ref="listView"
+		/>
+	</ion-page>
 </template>
 
 <script setup>
+import { IonPage, onIonViewWillEnter } from "@ionic/vue"
 import ListView from "@/components/ListView.vue"
+import { ref } from "vue"
 
+const listView = ref(null)
 const TAB_BUTTONS = ["My Claims", "Team Claims"]
 const EXPENSE_CLAIM_FIELDS = [
 	"`tabExpense Claim`.name",
@@ -54,4 +60,8 @@ const FILTER_CONFIG = [
 	},
 	{ fieldname: "posting_date", fieldtype: "Date", label: "Posting Date" },
 ]
+
+onIonViewWillEnter(() => {
+	listView.value?.setupListView()
+})
 </script>

@@ -1,16 +1,22 @@
 <template>
-	<ListView
-		doctype="Employee Advance"
-		pageTitle="Employee Advances"
-		:tabButtons="TAB_BUTTONS"
-		:fields="EMPLOYEE_ADVANCE_FIELDS"
-		:filterConfig="FILTER_CONFIG"
-	/>
+	<ion-page>
+		<ListView
+			doctype="Employee Advance"
+			pageTitle="Employee Advances"
+			:tabButtons="TAB_BUTTONS"
+			:fields="EMPLOYEE_ADVANCE_FIELDS"
+			:filterConfig="FILTER_CONFIG"
+			ref="listView"
+		/>
+	</ion-page>
 </template>
 
 <script setup>
+import { IonPage, onIonViewWillEnter } from "@ionic/vue"
 import ListView from "@/components/ListView.vue"
+import { ref } from "vue"
 
+const listView = ref(null)
 const TAB_BUTTONS = ["My Advances", "Team Advances"]
 const EMPLOYEE_ADVANCE_FIELDS = [
 	"name",
@@ -62,4 +68,8 @@ const FILTER_CONFIG = [
 	},
 	{ fieldname: "paid_amount", fieldtype: "Currency", label: "Paid Amount" },
 ]
+
+onIonViewWillEnter(() => {
+	listView.value?.setupListView()
+})
 </script>

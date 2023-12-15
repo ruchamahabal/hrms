@@ -1,16 +1,22 @@
 <template>
-	<ListView
-		doctype="Leave Application"
-		pageTitle="Leave History"
-		:tabButtons="TAB_BUTTONS"
-		:fields="LEAVE_FIELDS"
-		:filterConfig="FILTER_CONFIG"
-	/>
+	<ion-page>
+		<ListView
+			doctype="Leave Application"
+			pageTitle="Leave History"
+			:tabButtons="TAB_BUTTONS"
+			:fields="LEAVE_FIELDS"
+			:filterConfig="FILTER_CONFIG"
+			ref="listView"
+		/>
+	</ion-page>
 </template>
 
 <script setup>
+import { IonPage, onIonViewWillEnter } from "@ionic/vue"
 import ListView from "@/components/ListView.vue"
+import { ref } from "vue"
 
+const listView = ref(null)
 const TAB_BUTTONS = ["My Leaves", "Team Leaves"]
 const LEAVE_FIELDS = [
 	"name",
@@ -51,4 +57,8 @@ const FILTER_CONFIG = [
 	{ fieldname: "from_date", fieldtype: "Date", label: "From Date" },
 	{ fieldname: "to_date", fieldtype: "Date", label: "To Date" },
 ]
+
+onIonViewWillEnter(() => {
+	listView.value?.setupListView()
+})
 </script>
