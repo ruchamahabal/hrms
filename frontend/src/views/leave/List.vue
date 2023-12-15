@@ -1,12 +1,14 @@
 <template>
 	<ion-page>
-		<ListView
-			doctype="Leave Application"
-			pageTitle="Leave History"
-			:tabButtons="TAB_BUTTONS"
-			:fields="LEAVE_FIELDS"
-			:filterConfig="FILTER_CONFIG"
-		/>
+		<Suspense>
+			<ListView
+				doctype="Leave Application"
+				pageTitle="Leave History"
+				:tabButtons="TAB_BUTTONS"
+				:fields="LEAVE_FIELDS"
+				:filterConfig="FILTER_CONFIG"
+			/>
+		</Suspense>
 	</ion-page>
 </template>
 

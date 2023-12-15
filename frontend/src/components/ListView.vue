@@ -322,6 +322,7 @@ function fetchDocumentList(start = 0) {
 	})
 }
 
+// gesture handlers
 const handleScroll = debounce(() => {
 	if (!hasNextPage.value) return
 
@@ -348,13 +349,7 @@ watch(
 	}
 )
 
-onMounted(async () => {
-	const workflow = useWorkflow(props.doctype)
-	await workflow.workflowDoc.promise
-	workflowStateField.value = workflow.getWorkflowStateField()
-
-	fetchDocumentList()
-
+onMounted(() => {
 	socket.emit("doctype_subscribe", props.doctype)
 	socket.on("list_update", (data) => {
 		if (data?.doctype !== props.doctype) return
@@ -365,4 +360,14 @@ onMounted(async () => {
 onBeforeUnmount(() => {
 	socket.off("list_update")
 })
+
+// setup
+async function setupListView() {
+	const workflow = useWorkflow(props.doctype)
+	await workflow.workflowDoc.promise
+	workflowStateField.value = workflow.getWorkflowStateField()
+
+	fetchDocumentList()
+}
+setupListView()
 </script>

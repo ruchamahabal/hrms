@@ -1,12 +1,14 @@
 <template>
 	<ion-page>
-		<ListView
-			doctype="Employee Advance"
-			pageTitle="Employee Advances"
-			:tabButtons="TAB_BUTTONS"
-			:fields="EMPLOYEE_ADVANCE_FIELDS"
-			:filterConfig="FILTER_CONFIG"
-		/>
+		<Suspense>
+			<ListView
+				doctype="Employee Advance"
+				pageTitle="Employee Advances"
+				:tabButtons="TAB_BUTTONS"
+				:fields="EMPLOYEE_ADVANCE_FIELDS"
+				:filterConfig="FILTER_CONFIG"
+			/>
+		</Suspense>
 	</ion-page>
 </template>
 

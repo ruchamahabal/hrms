@@ -1,13 +1,15 @@
 <template>
 	<ion-page>
-		<ListView
-			doctype="Expense Claim"
-			pageTitle="Claim History"
-			:tabButtons="TAB_BUTTONS"
-			:fields="EXPENSE_CLAIM_FIELDS"
-			groupBy="`tabExpense Claim`.name"
-			:filterConfig="FILTER_CONFIG"
-		/>
+		<Suspense>
+			<ListView
+				doctype="Expense Claim"
+				pageTitle="Claim History"
+				:tabButtons="TAB_BUTTONS"
+				:fields="EXPENSE_CLAIM_FIELDS"
+				groupBy="`tabExpense Claim`.name"
+				:filterConfig="FILTER_CONFIG"
+			/>
+		</Suspense>
 	</ion-page>
 </template>
 
