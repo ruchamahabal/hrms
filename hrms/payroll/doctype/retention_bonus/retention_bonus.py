@@ -5,7 +5,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
-from frappe.utils import getdate
+from frappe.utils import flt, getdate
 
 from hrms.hr.utils import validate_active_employee
 
@@ -31,31 +31,25 @@ class RetentionBonus(Document):
 			additional_salary.ref_doctype = self.doctype
 			additional_salary.ref_docname = self.name
 			additional_salary.submit()
-			# self.db_set('additional_salary', additional_salary.name)
 
 		else:
-			bonus_added = (
-				frappe.db.get_value("Additional Salary", additional_salary, "amount") + self.bonus_amount
-			)
+			bonus_added = flt(additional_salary.amount) + self.bonus_amount
 			frappe.db.set_value("Additional Salary", additional_salary, "amount", bonus_added)
 			self.db_set("additional_salary", additional_salary)
 
 	def on_cancel(self):
-
 		additional_salary = self.get_additional_salary()
-		if self.additional_salary:
+		if additional_salary:
 			bonus_removed = (
-				frappe.db.get_value("Additional Salary", self.additional_salary, "amount") - self.bonus_amount
+				frappe.db.get_value("Additional Salary", additional_salary, "amount") - self.bonus_amount
 			)
 			if bonus_removed == 0:
-				frappe.get_doc("Additional Salary", self.additional_salary).cancel()
+				frappe.get_doc("Additional Salary", additional_salary).cancel()
 			else:
-				frappe.db.set_value("Additional Salary", self.additional_salary, "amount", bonus_removed)
+				frappe.db.set_value("Additional Salary", additional_salary, "amount", bonus_removed)
 
-			# self.db_set('additional_salary', '')
-
-	def get_additional_salary(self):
-		return frappe.db.exists(
+	def get_additional_salary(self) -> dict:
+		return frappe.db.get_value(
 			"Additional Salary",
 			{
 				"employee": self.employee,
@@ -67,4 +61,6 @@ class RetentionBonus(Document):
 				"ref_docname": self.name,
 				"disabled": 0,
 			},
+			["name", "amount"],
+			as_dict=True,
 		)
