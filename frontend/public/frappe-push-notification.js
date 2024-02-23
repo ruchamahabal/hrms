@@ -59,7 +59,7 @@ class FrappePushNotification {
 		this.serviceWorkerRegistration = serviceWorkerRegistration
 		const config = await this.fetchWebConfig()
 		this.messaging = getMessaging(initializeApp(config))
-		// this.onMessage(this.onMessageHandler)
+		this.onMessage(this.onMessageHandler)
 		this.initialized = true
 	}
 
@@ -122,7 +122,6 @@ class FrappePushNotification {
 	 * )} callback - Callback function to handle message
 	 */
 	onMessage(callback) {
-		console.log("onMessage")
 		if (callback == null) return
 		this.onMessageHandler = callback
 		if (this.messaging == null) return
