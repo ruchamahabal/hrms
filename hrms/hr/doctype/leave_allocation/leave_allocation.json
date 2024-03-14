@@ -19,6 +19,7 @@
   "section_break_6",
   "new_leaves_allocated",
   "carry_forward",
+  "actual_unused_leaves",
   "unused_leaves",
   "total_leaves_allocated",
   "total_leaves_encashed",
@@ -126,8 +127,7 @@
    "depends_on": "carry_forward",
    "fieldname": "unused_leaves",
    "fieldtype": "Float",
-   "label": "Unused leaves",
-   "read_only": 1
+   "label": "Unused Leaves"
   },
   {
    "allow_on_submit": 1,
@@ -230,6 +230,13 @@
    "options": "Company",
    "read_only": 1,
    "reqd": 1
+  },
+  {
+   "depends_on": "carry_forward",
+   "fieldname": "actual_unused_leaves",
+   "fieldtype": "Float",
+   "label": "Actual Unused Leaves",
+   "read_only": 1
   }
  ],
  "icon": "fa fa-ok",
@@ -237,7 +244,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-07 09:50:33.145825",
+ "modified": "2024-03-15 01:13:40.418493",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Leave Allocation",

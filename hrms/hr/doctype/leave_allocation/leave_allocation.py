@@ -233,6 +233,9 @@ class LeaveAllocation(Document):
 			self.precision("unused_leaves"),
 		)
 
+		# if not self.unused_leaves:
+		# 	self.unused_leaves = self.actual_unused_leaves
+
 		self.total_leaves_allocated = flt(
 			flt(self.unused_leaves) + flt(self.new_leaves_allocated),
 			self.precision("total_leaves_allocated"),
@@ -262,7 +265,7 @@ class LeaveAllocation(Document):
 		"""Set carry forwarded leaves in previous allocation"""
 		previous_allocation = get_previous_allocation(self.from_date, self.leave_type, self.employee)
 		if on_cancel:
-			self.unused_leaves = 0.0
+			self.unused_leaves = self.actual_unused_leaves = 0.0
 		if previous_allocation:
 			frappe.db.set_value(
 				"Leave Allocation",
