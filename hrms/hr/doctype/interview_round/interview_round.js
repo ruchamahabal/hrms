@@ -10,9 +10,10 @@ frappe.ui.form.on("Interview Round", {
 		}
 	},
 	designation: function (frm) {
-		frm.set_value("expected_skill_set", null);
 		if (frm.doc.designation) {
 			frappe.db.get_doc("Designation", frm.doc.designation).then((designation) => {
+				frappe.model.clear_table(frm.doc, "expected_skill_set");
+
 				designation.skills.forEach((designation_skill) => {
 					let row = frappe.model.add_child(
 						frm.doc,
@@ -21,6 +22,7 @@ frappe.ui.form.on("Interview Round", {
 					);
 					row.skill = designation_skill.skill;
 				});
+
 				refresh_field("expected_skill_set");
 			});
 		}
