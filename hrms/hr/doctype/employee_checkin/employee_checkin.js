@@ -2,16 +2,30 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Employee Checkin", {
-	refresh: async (_frm) => {
-		const allow_geolocation_tracking = await frappe.db.get_single_value(
-			"HR Settings",
-			"allow_geolocation_tracking",
-		);
+	refresh: (frm) => {
+		frm.trigger("set_geolocation");
+	},
 
-		if (!allow_geolocation_tracking) {
+	validate: (frm) => {
+		if (!frm.doc.geolocation) frm.trigger("set_geolocation");
+	},
+
+	set_geolocation: async (frm) => {
+		if (!frm.is_new()) return;
+
+		if (frm.__allow_geolocation_tracking === undefined) {
+			frm.__allow_geolocation_tracking = await frappe.db.get_single_value(
+				"HR Settings",
+				"allow_geolocation_tracking",
+			);
+		}
+
+		if (!frm.__allow_geolocation_tracking) {
 			hide_field(["fetch_geolocation", "latitude", "longitude", "geolocation"]);
 			return;
 		}
+
+		frm.trigger("fetch_geolocation");
 	},
 
 	fetch_geolocation: async (frm) => {
@@ -42,7 +56,7 @@ frappe.ui.form.on("Employee Checkin", {
 				if (error) {
 					msg += __("ERROR({0}): {1}", [error.code, error.message]);
 				}
-				frappe.msgprint({
+				frappe.throw({
 					message: msg,
 					title: __("Geolocation Error"),
 					indicator: "red",

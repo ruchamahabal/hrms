@@ -20,7 +20,6 @@
   "column_break_yqpi",
   "longitude",
   "section_break_ksbo",
-  "fetch_geolocation",
   "geolocation",
   "shift_timings_section",
   "shift_start",
@@ -159,15 +158,10 @@
    "fieldname": "section_break_ksbo",
    "fieldtype": "Section Break",
    "hide_border": 1
-  },
-  {
-   "fieldname": "fetch_geolocation",
-   "fieldtype": "Button",
-   "label": "Fetch Geolocation"
   }
  ],
  "links": [],
- "modified": "2024-05-29 21:19:11.550766",
+ "modified": "2024-05-30 10:50:45.248165",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Checkin",
