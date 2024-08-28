@@ -98,7 +98,7 @@ router.isReady().then(() => {
 		}).then((values) => {
 			if (!window.frappe) window.frappe = {}
 			window.frappe.boot = values
-			registerServiceWorker()
+			// registerServiceWorker()
 			app.mount("#app")
 		})
 	} else {

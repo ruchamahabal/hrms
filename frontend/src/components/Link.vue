@@ -3,6 +3,7 @@
 		ref="autocompleteRef"
 		size="sm"
 		v-model="value"
+		@update:query="handleQueryUpdate"
 		:placeholder="`Select ${doctype}`"
 		:options="options.data"
 		:class="disabled ? 'pointer-events-none' : ''"
@@ -65,7 +66,7 @@ const options = createResource({
 	},
 })
 
-const reloadOptions = debounce((searchTextVal) => {
+const reloadOptions = (searchTextVal) => {
 	options.update({
 		params: {
 			txt: searchTextVal,
@@ -73,6 +74,13 @@ const reloadOptions = debounce((searchTextVal) => {
 		},
 	})
 	options.reload()
+}
+
+const handleQueryUpdate = debounce((query) => {
+	const val = query || ""
+	if (searchText.value === val) return
+	searchText.val = val
+	reloadOptions(val)
 }, 300)
 
 watch(
@@ -80,17 +88,6 @@ watch(
 	() => {
 		if (!props.doctype || props.doctype === options.doctype) return
 		reloadOptions("")
-	},
-	{ immediate: true }
-)
-
-watch(
-	() => autocompleteRef.value?.query,
-	(val) => {
-		val = val || ""
-		if (searchText.value === val) return
-		searchText.value = val
-		reloadOptions(val)
 	},
 	{ immediate: true }
 )
