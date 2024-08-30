@@ -1,0 +1,53 @@
+{
+ "creation": "2024-05-09 22:08:14.890340",
+ "custom": 0,
+ "docstatus": 0,
+ "doctype": "Module Sidebar",
+ "idx": 0,
+ "items": [
+  {
+   "icon": "customer",
+   "label": "Employee",
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "type": "Link"
+  }
+ ],
+ "modified": "2024-05-31 18:13:35.722254",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "HR",
+ "owner": "Administrator",
+ "workspaces": [
+  {
+   "icon": "users",
+   "label": "Recruitment",
+   "workspace": "Recruitment"
+  },
+  {
+   "icon": "assign",
+   "label": "Employee Lifecycle",
+   "workspace": "Employee Lifecycle"
+  },
+  {
+   "icon": "star",
+   "label": "Performance",
+   "workspace": "Performance"
+  },
+  {
+   "icon": "milestone",
+   "label": "Shift & Attendance",
+   "workspace": "Shift & Attendance"
+  },
+  {
+   "icon": "expenses",
+   "label": "Expense Claims",
+   "workspace": "Expense Claims"
+  },
+  {
+   "icon": "non-profit",
+   "label": "Leaves",
+   "workspace": "Leaves"
+  }
+ ]
+}

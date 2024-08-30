@@ -1,0 +1,16 @@
+{
+ "color": "#59BA8B",
+ "creation": "2024-05-10 14:32:57.177418",
+ "custom": 0,
+ "docstatus": 0,
+ "doctype": "Desktop Item",
+ "icon": "hr",
+ "idx": 0,
+ "label": "Human Resources",
+ "link_type": "Module",
+ "modified": "2024-05-10 14:32:57.177418",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Human Resources",
+ "owner": "Administrator"
+}

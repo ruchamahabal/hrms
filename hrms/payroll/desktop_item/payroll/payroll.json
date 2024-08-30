@@ -1,0 +1,16 @@
+{
+ "color": "#153D43",
+ "creation": "2024-05-08 20:07:37.820586",
+ "custom": 0,
+ "docstatus": 0,
+ "doctype": "Desktop Item",
+ "icon": "money-coins-1",
+ "idx": 0,
+ "label": "Payroll",
+ "link_type": "Module",
+ "modified": "2024-05-08 20:07:46.477258",
+ "modified_by": "Administrator",
+ "module": "Payroll",
+ "name": "Payroll",
+ "owner": "Administrator"
+}
